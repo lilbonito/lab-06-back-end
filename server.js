@@ -23,24 +23,9 @@ app.get('/weather', (request, response) =>{
   response.send(weatherData);
 });
 
-
-
-function Location(query, geoData){
-  this.query = query;
-  this.formated_query = geoData.formatted_address;
-  this.latitude = geoData.geometry.location.lat;
-  this.longitude = geoData.geometry.location.lng;
-}
-function Weather(query, weatherData){
-  this.query = query;
-  this.time = weatherData.daily.data.time;
-  this.forcast = weatherData.daily.data.summary;
-  // this.time2 = weatherData.data.time;
-}
-  
-
 function searchToLatLong(query) {
   const geoData = require('./data/geo.json');
+  console.log(geoData);
   const location = new Location(query, geoData);
   return location;
 }
@@ -52,15 +37,19 @@ function searchTimeForcast(query) {
   console.log( weather);
   return weather;
 }
- 
 
-
-
-
-
-
-
-
+function Location(query, geoData){
+  this.search_query = query;
+  this.formated_query = geoData.results[0].formatted_address;
+  this.latitude = geoData.results[0].geometry.location.lat;
+  this.longitude = geoData.results[0].geometry.location.lng;
+}
+function Weather(query, weatherData){
+  this.search_query = query;
+  this.time = weatherData.daily.data[0].time;
+  this.forcast = weatherData.daily.data[0].summary;
+  
+  
 
 
 
