@@ -14,29 +14,47 @@ app.get('/location', (request, response) =>{
 
   const locationData = searchToLatLong(request.query.data);
   response.send(locationData);
+ 
+});
+
+app.get('/weather', (request, response) =>{ 
+
+  const weatherData = searchTimeForcast(request.query.data);
+  response.send(weatherData);
 });
 
 
 
-//   function Location(query, geoData){
-//     const geoD
-//     this.query = query;
-//     this.formated_query = geoData.formatted_address;
-//     this.latitude = geoData.geometry.location.lat;
-//     this.longitude = geoData.geometry.location.lng;
-
-//   }
+function Location(query, geoData){
+  this.query = query;
+  this.formated_query = geoData.formatted_address;
+  this.latitude = geoData.geometry.location.lat;
+  this.longitude = geoData.geometry.location.lng;
+}
+function Weather(query, weatherData){
+  this.query = query;
+  this.time = weatherData.daily.data.time;
+  this.forcast = weatherData.daily.data.summary;
+  // this.time2 = weatherData.data.time;
+}
+  
 
 function searchToLatLong(query) {
-  const geoData = require('./data/geo.json')
-  const location = {
-    search_query: query,
-    formatted_query: geoData.results[0].formatted_address,
-    latitude: geoData.results[0].geometry.location.lat,
-    longitude: geoData.results[0].geometry.location.lng
-  }
+  const geoData = require('./data/geo.json');
+  const location = new Location(query, geoData);
   return location;
 }
+
+
+function searchTimeForcast(query) {
+  const weatherData = require('./data/darksky.json');
+  const weather = new Weather(query, weatherData);
+  console.log( weather);
+  return weather;
+}
+ 
+
+
 
 
 
